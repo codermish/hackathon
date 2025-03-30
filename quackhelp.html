@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Prevention - Atilla Quack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Saira Condensed', sans-serif;
+            background-color: #f4f4f4;
+            padding-top: 10px;
+            text-align: center;
+        }
+        .tabs-container {
+            width: 100%;
+            padding: 0;
+        }
+        .nav-tabs {
+            border-bottom: none;
+            background-color: #808080;
+        }
+        .nav-tabs .nav-link {
+            color: white;
+            border: none;
+        }
+        .nav-tabs .nav-link.active {
+            background-color: white;
+            color: grey;
+            font-weight: bold;
+        }
+        .tab-content {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .welcome-message {
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+        }
+        .mascot-container {
+            margin-top: 100px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        
+         .form-container {
+            display: none; /* Hide initially */
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group input[type="submit"] {
+            background-color: #800020;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #B22222;
+        }
+        
+        .guidelines {
+            background-color: #f4f4f4;
+            border: 2px solid #808080;
+            padding: 15px;
+            font-size: 1.2rem;
+            width: 100%;
+            border-radius: 10px;
+            color: black;
+        }
+        .risk-section {
+            width: 50;
+    width: 40%;
+    padding: 20px;
+    margin: 50px 0;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: none;
+    text-align: center;
+    margin-left: 400px;
+        }
+        .test-buttons button {
+            background-color: white;
+            color: #800020;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+        .test-buttons button:hover {
+            background-color: #ddd;
+        }
+      
+        #mascot-img {  
+     margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+    height: 450px;
+        }
+        /* Shimmer effect for Quack Smart */
+        @keyframes shimmer {
+            0% {
+                color: #f4f4f4;
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+            50% {
+                color: #800020;
+                text-shadow: 0 0 15px rgba(255, 0, 0, 0.7), 0 0 30px rgba(255, 0, 0, 0.5);
+            }
+            100% {
+                color: #f4f4f4;
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        .shimmer {
+            color: black;
+            font-weight: bold;
+        }
+
+        /* Make the video responsive */
+        .responsive-video {
+            width: 100%; /* Full width for responsiveness */
+            height: auto; /* Adjust height according to width */
+            max-width: 800px; /* Set max width for better control */
+            margin: 20px auto; /* Center the video */
+        }
+    </style>
+    <script>
+ 
+function showRiskLevel(risk) {
+    // Hide all sections initially
+    document.getElementById('safe').style.display = "none";
+    document.getElementById('moderate').style.display = "none";
+    document.getElementById('danger').style.display = "none";
+    document.getElementById('guidelines-safe').style.display = "none";
+    document.getElementById('guidelines-moderate').style.display = "none";
+    document.getElementById('guidelines-danger').style.display = "none";
+    document.getElementById('mascot-img').style.display = "none";
+    document.getElementById('danger-video').style.display = "none";
+    document.getElementById('advice').innerHTML = ""; // Reset the advice content
+    
+    // Remove the safe image if it's there
+    var image = document.getElementById('safe-image-background');
+    if (image) {
+        image.remove();
+    }
+
+    // Show the appropriate content based on the risk level
+    if (risk === "safe") {
+        document.body.style.backgroundColor = "#006400"; // Pista Green
+        document.getElementById('safe').style.display = "block";
+        document.getElementById('guidelines-safe').style.display = "block";
+        document.getElementById('mascot-img').style.display = "block";
+        document.getElementById('mascot-img').src = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODdhYnpvaTJmZ2hjZHo4aHJkM3gycWp1bzVncmpjdXg5eHJtdTRpaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/DRsUQdJXgyO45X3fJM/giphy.gif"; // Safe Zone GIF
+        document.getElementById('advice').innerHTML = "<h3>Atilla Quack Advice for Safe Zone</h3><p>Feel free to go for a walk or relax outdoors. Stay aware of your surroundings, but enjoy the environment. Keep an eye out for local advisories, but there are no immediate threats.</p>";
+
+        // Add background image for the safe zone
+        var image = document.createElement('img');
+        image.id = 'safe-image-background';
+        image.src = 'https://cdn.viewing.nyc/assets/media/3db5ed2c1ab0b8ef2a912ca9549724f7/elements/5cbba76fba5389993cafad07c97d298b/ec027fc5-db4e-4f9e-a547-18b5f6484be3.jpg';
+        image.style.position = "absolute";
+        image.style.top = "0";
+        image.style.left = "0";
+        image.style.width = "100%";
+        image.style.height = "100%";
+        image.style.objectFit = "cover"; // Ensures the image covers the entire background
+        image.style.zIndex = "-1";  // Make sure the image stays in the background
+        document.body.appendChild(image);
+    } else if (risk === "moderate") {
+    	    document.body.style.backgroundColor = "#F7DC6F"; // Light Decent Yellow
+    	    document.getElementById('moderate').style.display = "block";
+    	    document.getElementById('guidelines-moderate').style.display = "block";
+    	    document.getElementById('mascot-img').style.display = "none";  // Hide the previous mascot image
+    	    document.getElementById('advice').innerHTML = "<h3>Atilla Quack Advice for Moderate Zone</h3><p>Stay cautious and alert. Avoid unfamiliar areas at night. Follow local government safety recommendations and advisories. Make sure your mobile device is charged and keep emergency contacts ready.</p>";
+    	    
+    	    // Show the video for moderate zone instead of the mascot
+    	    document.getElementById('mascot-img').style.display = "none";  // Hide the mascot
+    	    var videoContainer = document.createElement('div');
+    	    videoContainer.classList.add('responsive-video');
+    	    if (!document.querySelector('video')) {
+    	        videoContainer.innerHTML = '<video autoplay="" muted="" style="width:80%; height:auto; max-height:500px;"><source src="https://march-m-r.github.io/videos/vidu-video-2711385768895677 (1).mp4" type="video/mp4">Your browser does not support the video tag.</video>';
+    	    }
+    	    document.getElementById('moderate').appendChild(videoContainer);
+    	    
+    	    
+    	    //Add background for moderate zone:
+    	    var image = document.createElement('img');
+        image.id = 'safe-image-background';
+        image.src = 'https://c7.alamy.com/comp/DBGEMC/group-of-new-york-taxi-cabs-at-a-new-york-city-street-junction-DBGEMC.jpg';
+        image.style.position = "absolute";
+        image.style.top = "0";
+        image.style.left = "0";
+        image.style.width = "100%";
+        image.style.height = "100%";
+        image.style.objectFit = "cover"; // Ensures the image covers the entire background
+        image.style.zIndex = "-1";  // Make sure the image stays in the background
+        document.body.appendChild(image);
+
+    	
+    } else if (risk === "danger") {
+        document.body.style.backgroundColor = "#800020"; // Burgundy Red
+        document.getElementById('danger').style.display = "block";
+        document.getElementById('guidelines-danger').style.display = "block";
+        document.getElementById('mascot-img').style.display = "none";
+        document.getElementById('danger-video').style.display = "block";
+        document.getElementById('danger-video').innerHTML = '<video autoplay muted loop style="width:80%; height:auto; max-height:500px;"> <source src="https://march-m-r.github.io/videos/vidu-video-2710705725360942.mp4" type="video/mp4"> Your browser does not support the video tag. </video>';
+        document.getElementById('advice').innerHTML = "<h3>Atilla Quack Advice for Danger Zone</h3><p>Stay indoors if possible. Avoid unnecessary travel. Listen to local authorities and follow evacuation orders if issued. Keep a well-stocked emergency kit and stay in touch with family.</p>";
+    }
+}
+
+        // Check Geolocation
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                // Dummy Risk Assessment based on lat/lon
+                if (lat > 40.0 && lon < -74.0) {
+                    showRiskLevel("safe");
+                } else if (lat > 39.0 && lon < -75.0) {
+                    showRiskLevel("moderate");
+                } else {
+                    showRiskLevel("danger");
+                }
+            }, function() {
+                showRiskLevel("moderate"); // Default to moderate if geolocation fails
+            });
+        } else {
+            showRiskLevel("moderate"); // Default to moderate if geolocation is not supported
+        }
+        
+       
+
+        
+
+    </script>
+    
+</head>
+<body>
+    <div class="tabs-container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Welcome</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="map-tab" data-toggle="tab" href="#map" role="tab" aria-controls="map" aria-selected="false">Map</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" id="guidelines-tab" data-toggle="tab" href="#guidelines" role="tab" aria-controls="guidelines" aria-selected="false">Atilla Quack Guidelines</a>
+            </li>
+            
+<!--                        <li class="nav-item">
+                <a class="nav-link" id="map-tab" data-toggle="tab" href="#help" role="tab" aria-controls="help" aria-selected="false">Atilla Tell me Safe Areas</a>
+            </li>  -->
+            
+                             <li class="nav-item">
+                <a class="nav-link" id="ana-tab" data-toggle="tab" href="#ana" role="tab" aria-controls="ana" aria-selected="false">Atilla Help me Analyze Safe Areas</a>
+            </li>  
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="welcome-message shimmer">
+                </div>
+                <div class="mascot-container">
+                    <img id="mascot-img" src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODdhYnpvaTJmZ2hjZHo4aHJkM3gycWp1bzVncmpjdXg5eHJtdTRpaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/DRsUQdJXgyO45X3fJM/giphy.gif" alt="Atilla GIF">
+                </div>
+
+                <div id="safe" class="risk-section" style="background-color: #006400; color: white;">🟢 You are in a Safe Zone!</div>
+                <div id="moderate" class="risk-section" style="background-color: #F7DC6F; color: black;">🟡 You are in a Moderate Risk Zone!</div>
+         
+                
+                <div id="danger" class="risk-section" style="background-color: #800020; color: white; margin-top: 0px; text-align: center;">
+    🔴 You are in a High Risk Zone!
+</div>
+                
+                
+                <div id="danger-video" class="danger-video-container" style="display:none;"></div>
+
+                <div class="test-buttons">
+                    <button onclick="showRiskLevel('safe')">Test Safe</button>
+                    <button onclick="showRiskLevel('moderate')">Test Moderate</button>
+                    <button onclick="showRiskLevel('danger')">Test Danger</button>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="map" role="tabpanel" aria-labelledby="map-tab">
+            <iframe src="https://codermish.github.io/hackathon/output.html"  
+        style="position: absolute; top: 42px; left: 0; width: 100%; height: 95vh;bottom:0; border: 1px;">
+</iframe>
+            
+            </div>
+
+            <div class="tab-pane fade" id="advice" role="tabpanel" aria-labelledby="advice-tab">
+                <div id="advice" class="advice-section">
+                    <!-- Dynamic advice will be populated here -->
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="guidelines" role="tabpanel" aria-labelledby="guidelines-tab">
+                <div id="guidelines-safe" class="guidelines" style="display:none;">
+                <h3 style="color: #006400; font-weight: bold;">Safe Zone Guidelines</h3>
+                
+                    <ul>
+                        <li>Feel free to go for a walk.</li>
+                        <li>Stay aware of your surroundings.</li>
+                        <li>Enjoy the environment, but always be cautious.</li>
+                    </ul>
+                                          <div class="mascot-container">
+        <img id="mascot-img" src="https://raw.githubusercontent.com/march-M-R/videos/refs/heads/main/ChatGPT%20Image%20Mar%2030%2C%202025%2C%2002_12_33%20AM.png" alt="Atilla GIF" style="width: 100%; max-width: 600px; height: auto;">
+    </div>
+                </div>
+     <div class="tab-content" id="myTabContent">
+            <!-- Safe Areas Section -->
+      
+
+    <!-- Bootstrap JS (for tabs) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+         
+        </div>
+                <div id="guidelines-moderate" class="guidelines" style="display:none;">
+                    <h3>Moderate Zone Guidelines</h3>
+                    <ul>
+                        <li>Stay alert and cautious.</li>
+                        <li>Avoid unfamiliar areas at night.</li>
+                        <li>Follow local government advisories.</li>
+                    </ul>
+                                          <div class="mascot-container">
+        <img id="mascot-img" src="https://raw.githubusercontent.com/march-M-R/videos/refs/heads/main/ChatGPT%20Image%20Mar%2030%2C%202025%2C%2002_12_33%20AM.png" alt="Atilla GIF" style="width: 100%; max-width: 600px; height: auto;">
+    </div>
+                </div>
+
+                <div id="guidelines-danger" class="guidelines" style="display:none;">
+                <h1 style="color: red;">Danger Zone Guidelines</h1>
+                
+                    <h3>We understand you're in a tough spot, but stay strong — we’re here for you! 🌟
+
+<br>
+Take a deep breath, and follow these steps to stay safe.</h3>
+                    <ul>
+                       <li>️ Head to a Safe Spot – Use our map to locate safe spots around you!!</li>
+
+<li>️Call for Help – Dial 911 or use safety apps like bSafe, Noonlight, or Life360 if you're unable to talk.</li>
+
+                    </ul>
+                      <div class="mascot-container">
+        <img id="mascot-img" src="https://raw.githubusercontent.com/march-M-R/videos/refs/heads/main/ChatGPT%20Image%20Mar%2030%2C%202025%2C%2002_12_33%20AM.png" alt="Atilla GIF" style="width: 100%; max-width: 600px; height: auto;">
+    </div>
+                </div>
+            </div>
+        
+          <div class="tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
+              <div class="container mt-5" style="background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; padding: 30px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 500px; margin: 0 auto;">
+    <h2 class="text-center" style="color: #800020; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-bottom: 20px;">Track Your Location, Empower Your Journey!</h2>
+    <form>
+        <div class="form-group">
+            <label for="latitude" style="color: #800020; font-weight: 600;">Latitude:</label>
+            <input type="text" class="form-control" id="latitude" placeholder="Enter latitude" style="border: 1px solid #800020; border-radius: 4px; padding: 10px; font-size: 16px;">
+        </div>
+        <div class="form-group">
+            <label for="longitude" style="color: #800020; font-weight: 600;">Longitude:</label>
+            <input type="text" class="form-control" id="longitude" placeholder="Enter longitude" style="border: 1px solid #800020; border-radius: 4px; padding: 10px; font-size: 16px;">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" style="border-radius: 5px; font-size: 16px; padding: 12px; background-color: #800020; border: none; font-weight: bold;">Submit</button>
+    </form>
+    <p class="text-center" style="color: #800020; font-style: italic; margin-top: 20px;">Your location is the key to exploring the world!</p>
+</div>
+              
+               
+                
+            </div>
+        
+<div class="tab-pane fade" id="ana" role="tabpanel" aria-labelledby="ana-tab">
+    <div class="container text-center mt-5" style="border: 10px solid #800020; border-radius: 8px; padding: 20px;">
+        <h2 class="text-center" style="color: #800020; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-bottom: 20px;">Analyze Your Location, Empower Your Journey!</h2>
+
+        <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODdhYnpvaTJmZ2hjZHo4aHJkM3gycWp1bzVncmpjdXg5eHJtdTRpaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/DRsUQdJXgyO45X3fJM/giphy.gif" alt="GIF" />
+        
+        <a href="https://colab.research.google.com/drive/1weWmtsTR5hxrLRlvVRgnEda3rSC6wzml?usp=sharing" target="_blank">
+            <button class="atilla-btn">Open in Colab</button>
+        </a>
+            <p class="text-center" style="color: #800020; font-style: italic; margin-top: 20px;">Your location is the key to exploring the world!</p>
+        
+    </div>
+</div>
+
+
+<!-- Add the styles for the button -->
+<style>
+    .atilla-btn {
+        background-color: #800020; /* Burgundy color */
+        color: #fff;
+        border: none;
+        padding: 15px 25px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        cursor: pointer;
+    }
+
+    .atilla-btn:hover {
+        background-color: #660018; /* Darker burgundy */
+        transform: scale(1.05);
+    }
+
+    .atilla-btn:focus {
+        outline: none;
+    }
+
+    .container {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 0 auto;
+    }
+</style>
+         
+        
+        </div>
+    </div>
+<script>
+document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevents the form from submitting and page reloading
+
+    // Get the latitude and longitude values entered by the user
+    const latitude = document.getElementById('latitude').value;
+    const longitude = document.getElementById('longitude').value;
+
+    // Prepare the data object to send to the server
+    const data = {
+        latitude: latitude,
+        longitude: longitude
+    };
+
+    // Alert to check if form submission is working
+    alert("Form submitted!");
+
+    // URL where you want to send the data (replace with your actual URL)
+    const url = 'https://your-api-url.com/endpoint';
+
+    // Use fetch to send the data to the server via a POST request
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'  // Sending data as JSON
+        },
+        body: JSON.stringify(data)  // Convert data object to JSON string
+    })
+    .then(response => response.json())  // Handle the server's JSON response
+    .then(data => {
+        console.log('Success:', data);
+        // You can add further actions here like showing a success message
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        // You can handle errors here like showing an error message
+    });
+});
+</script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
